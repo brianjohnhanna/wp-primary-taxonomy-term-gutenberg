@@ -13,7 +13,7 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
         class HierarchicalTermSelectorWithPrimaryTerm extends OriginalComponent {
             constructor(props) {
                 super(props);
-                this.state.primaryTerm = 1;
+                this.state.primaryTerm = null;
             }
             render() {
                 const { slug, taxonomy, instanceId, hasCreateAction, hasAssignAction } = this.props;
@@ -60,7 +60,8 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
                 const showFilter = availableTerms.length >= MIN_TERMS_COUNT_FOR_FILTER;
 
                 const { terms: selectedTermIds = [] } = this.props;
-                const primaryTermOptions = availableTermsTree
+                const primaryTermSelectLabel = __(`Primary ${taxonomy.labels.singular_name}`, 'bjh-primary-category');
+                const primaryTermSelectOptions = availableTermsTree
                     .filter(termObj => selectedTermIds.indexOf(termObj.id) !== -1)
                     .map(termObj => ({ label: termObj.name, value: termObj.id }));
 
@@ -79,11 +80,10 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
                         key="term-filter-input"
                     />,
                     <SelectControl
-                        label="Primary Category"
-                        noOptionLabel="Select a Term"
-                        onChange={ this.makePrimary.bind(this) }
+                        label={ primaryTermSelectLabel }
+                        onChange={ this.savePrimaryTerm.bind(this) }
                         value={ this.state.primaryTerm }
-                        options={ primaryTermOptions }
+                        options={ primaryTermSelectOptions }
                     />,
                     <div
                         className="editor-post-taxonomies__hierarchical-terms-list"
@@ -145,15 +145,14 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
 
             componentDidMount() {
                 const { slug } = this.props;
-                const postId = wp.data.select('core/editor').getCurrentPostId();
                 const postMeta = wp.data.select('core/editor').getCurrentPostAttribute('meta');
                 const primaryTerm = postMeta[`bjh_primary_${slug}`] || null;
                 this.setState({ primaryTerm: primaryTerm})
             }
             
-            makePrimary(termId) {
+            savePrimaryTerm(termId) {
                 termId = parseInt( termId, 10 );
-                
+
                 const postId = wp.data.select("core/editor").getCurrentPostId();   
                 const { slug } = this.props;
                 apiFetch.use( apiFetch.createNonceMiddleware( window.bjhpc ) );
@@ -169,6 +168,7 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
                 request.then(() => {
                     this.setState( { primaryTerm: termId } );
                 }).catch((err) => {
+                    // @TODO Add error handling...
                     console.warn(err);
                 })
             }
