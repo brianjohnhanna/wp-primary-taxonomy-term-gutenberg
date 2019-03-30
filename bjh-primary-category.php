@@ -24,9 +24,10 @@ class Primary_Category {
             [
                 'type' => 'integer',
                 'description' => 'The primary category assigned to a post',
-                'single' => true
+                'single' => true,
+                'show_in_rest' => true
             ]
-        );
+        );      
     }
 
     /**
@@ -45,10 +46,11 @@ class Primary_Category {
     }
 }
 
-function _bjhpc_run_plugin() {
-    $classname = __NAMESPACE__ . '\\Primary_Category';
-    (new $classname)->init();
-}
-
 // Blast Off!
-_bjhpc_run_plugin();
+add_action(
+    'plugins_loaded',
+    function() {
+        $classname = __NAMESPACE__ . '\\Primary_Category';
+        (new $classname)->init();
+    }
+);
