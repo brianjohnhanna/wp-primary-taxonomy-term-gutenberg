@@ -4,6 +4,8 @@ This WordPress plugin adds a primary category dropdown to the Gutenberg post edi
 
 > Notice: This is an exploratory project, and is not suggested for production use. Feel free to fork and/or PR if you feel so inclined.
 
+![Edit Screenshot](assets/screenshot-1.jpg "Post Edit Screen")
+
 ### Todo
 
 [ ] Selecting additional category should not automatically reset the primary
@@ -11,3 +13,4 @@ This WordPress plugin adds a primary category dropdown to the Gutenberg post edi
 [ ] Add template functions & implement hooks for displaying primary category on front-end
 [ ] Add option to implement for taxonomies other than just categories
 [ ] Fix display issue when toggling between Document and Block tabs
+[ ] Additional testing
