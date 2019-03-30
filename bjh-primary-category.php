@@ -17,6 +17,16 @@ class Primary_Category {
             'enqueue_block_editor_assets',
             [ $this, 'enqueue_script' ]
         );
+
+        register_post_meta( 
+            'post', 
+            '_bjh_primary_category', 
+            [
+                'type' => 'integer',
+                'description' => 'The primary category assigned to a post',
+                'single' => true
+            ]
+        );
     }
 
     /**
@@ -25,11 +35,13 @@ class Primary_Category {
      * @return void
      */
     public function enqueue_script() {
-        wp_enqueue_script(
+        wp_register_script(
             'bjh-primary-category-gb', 
             plugins_url( 'dist/main.js', __FILE__ ), 
             [ 'wp-blocks', 'wp-element', 'wp-components' ]
         );
+        wp_localize_script('bjh-primary-category-gb', 'bjhpc', wp_create_nonce('wp_rest'));
+        wp_enqueue_script('bjh-primary-category-gb');
     }
 }
 
