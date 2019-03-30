@@ -144,28 +144,26 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
             }
 
             componentDidMount() {
-                const postId = wp.data.select("core/editor").getCurrentPostId();
-                apiFetch.use( apiFetch.createNonceMiddleware( window.bjhpc ) );
-                apiFetch( {
-                    path: `/wp-json/wp/v2/posts/${postId}`,
-                    method: 'GET'
-                } ).then(res => console.log(res));
+                const { slug } = this.props;
+                const postId = wp.data.select('core/editor').getCurrentPostId();
+                const postMeta = wp.data.select('core/editor').getCurrentPostAttribute('meta');
+                const primaryTerm = postMeta[`bjh_primary_${slug}`] || null;
+                this.setState({ primaryTerm: primaryTerm})
             }
             
             makePrimary(termId) {
-                const postId = wp.data.select("core/editor").getCurrentPostId();
                 termId = parseInt( termId, 10 );
-                const { taxonomy, slug } = this.props;
-                const meta = {
-                    [`_bjh_primary_${slug}`]: termId
-                };
+                
+                const postId = wp.data.select("core/editor").getCurrentPostId();   
+                const { slug } = this.props;
                 apiFetch.use( apiFetch.createNonceMiddleware( window.bjhpc ) );
                 const request = apiFetch( {
                     path: `/wp-json/wp/v2/posts/${postId}`,
                     method: 'POST',
                     data: {
-                        title: 'Test Post 2',
-                        meta
+                        meta: {
+                            [`bjh_primary_${slug}`]: termId
+                        }
                     },
                 } );
                 request.then(() => {

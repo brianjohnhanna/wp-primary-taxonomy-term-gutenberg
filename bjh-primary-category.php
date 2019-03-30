@@ -20,7 +20,7 @@ class Primary_Category {
 
         register_post_meta( 
             'post', 
-            '_bjh_primary_category', 
+            'bjh_primary_category', 
             [
                 'type' => 'integer',
                 'description' => 'The primary category assigned to a post',
