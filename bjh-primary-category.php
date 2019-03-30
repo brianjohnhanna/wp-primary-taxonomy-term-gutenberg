@@ -15,6 +15,14 @@ namespace BJH;
 
 class Primary_Category {
 
+    protected $taxonomies;
+
+    public function __construct() {
+        $primary_term_taxonomies = apply_filters('bjh/primary_term_taxonomies', ['category']);
+        $all_taxonomies = get_taxonomies([], 'names');
+        $this->taxonomies = array_intersect($primary_term_taxonomies, $all_taxonomies);
+    }
+
     /**
      * Apply all hooks necessary to run
      *
@@ -32,7 +40,7 @@ class Primary_Category {
         $all_taxonomies = get_taxonomies([], 'names');
         $taxonomies = array_intersect($primary_term_taxonomies, $all_taxonomies);
 
-        foreach ( $taxonomies as $taxonomy ) {
+        foreach ( $this->taxonomies as $taxonomy ) {
             register_post_meta( 
                 'post', 
                 "bjh_primary_$taxonomy", 
@@ -58,7 +66,10 @@ class Primary_Category {
             plugins_url( 'dist/main.js', __FILE__ ), 
             [ 'wp-blocks', 'wp-element', 'wp-components' ]
         );
-        wp_localize_script('bjh-primary-category-gb', 'bjhpc', wp_create_nonce('wp_rest'));
+        wp_localize_script('bjh-primary-category-gb', '_bjhpc', [
+            'nonce' => wp_create_nonce('wp_rest'),
+            'taxonomies' => $this->taxonomies
+        ]);
         wp_enqueue_script('bjh-primary-category-gb');
     }
 }

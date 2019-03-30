@@ -7,7 +7,7 @@ import apiFetch from '@wordpress/api-fetch';
 const MIN_TERMS_COUNT_FOR_FILTER = 8;
 
 const FilterTaxonomyTermSelector = ( OriginalComponent ) => {
-    
+
     // @see https://github.com/WordPress/gutenberg/blob/master/packages/editor/src/components/post-taxonomies/hierarchical-term-selector.js
     class HierarchicalTermSelectorWithPrimaryTerm extends OriginalComponent {
         constructor(props) {
@@ -153,7 +153,7 @@ const FilterTaxonomyTermSelector = ( OriginalComponent ) => {
             termId = parseInt( termId, 10 );
             const postId = wp.data.select("core/editor").getCurrentPostId();   
             const { slug } = this.props;
-            apiFetch.use( apiFetch.createNonceMiddleware( window.bjhpc ) );
+            apiFetch.use( apiFetch.createNonceMiddleware( window._bjhpc.nonce ) );
             const request = apiFetch( {
                 path: `/wp-json/wp/v2/posts/${postId}`,
                 method: 'POST',
@@ -175,12 +175,11 @@ const FilterTaxonomyTermSelector = ( OriginalComponent ) => {
 
     return function( props ) { 
 
-        if ( props.slug === 'category' ) { 
+        if ( window._bjhpc.taxonomies.indexOf(props.slug) !== -1 ) { 
             return createElement( 
                 HierarchicalTermSelectorWithPrimaryTerm,
                 props 
             );
-
         } else {
             return createElement(
                 OriginalComponent,
