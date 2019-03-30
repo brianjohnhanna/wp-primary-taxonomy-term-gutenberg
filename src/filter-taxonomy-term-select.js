@@ -139,14 +139,13 @@ const FilterTaxonomyTermSelector = ( OriginalComponent ) => {
                     </form>
                 ),
             ];
-            /* eslint-enable jsx-a11y/no-onchange */
         }
 
         componentDidMount() {
             const { slug } = this.props;
             const postMeta = wp.data.select('core/editor').getCurrentPostAttribute('meta');
             const primaryTerm = postMeta[`bjh_primary_${slug}`] || null;
-            this.setState({ primaryTerm: primaryTerm})
+            this.setState({ primaryTerm: primaryTerm })
         }
         
         savePrimaryTerm(termId) {
