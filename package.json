@@ -9,9 +9,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
+    "@wordpress/api-fetch": "^3.1.0",
     "@wordpress/babel-preset-default": "^4.1.0",
     "@wordpress/components": "^7.2.0",
     "@wordpress/element": "^2.3.0",
+    "@wordpress/i18n": "^3.3.0",
+    "lodash": "^4.17.11",
     "parcel-bundler": "^1.12.3"
   },
   "babel": {

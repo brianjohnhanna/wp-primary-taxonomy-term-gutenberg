@@ -1,6 +1,14 @@
 <?php
 /**
- * Plugin Name: Primary Category for Gutenberg
+ * Plugin Name: Primary Taxonomy Term for Gutenberg
+ * Plugin URI:  https://github.com/brianjohnhanna/wp-primary-taxonomy-term-gutenberg
+ * Description: Adds admin UI for selecting a primary taxonomy term
+ * Version:     0.1
+ * Author:      Brian John Hanna
+ * Author URI:  http://brianjohnhanna.com/
+ * License:     GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: bjh-primary-category
  */
 
 namespace BJH;
@@ -18,16 +26,25 @@ class Primary_Category {
             [ $this, 'enqueue_script' ]
         );
 
-        register_post_meta( 
-            'post', 
-            'bjh_primary_category', 
-            [
-                'type' => 'integer',
-                'description' => 'The primary category assigned to a post',
-                'single' => true,
-                'show_in_rest' => true
-            ]
-        );      
+        $primary_term_taxonomies = apply_filters('bjh/primary_term_taxonomies', ['category']);
+        
+        // Ensure we have valid taxonomies only
+        $all_taxonomies = get_taxonomies([], 'names');
+        $taxonomies = array_intersect($primary_term_taxonomies, $all_taxonomies);
+
+        foreach ( $taxonomies as $taxonomy ) {
+            register_post_meta( 
+                'post', 
+                "bjh_primary_$taxonomy", 
+                [
+                    'type' => 'integer',
+                    'description' => "The primary $taxonomy assigned to a post",
+                    'single' => true,
+                    'show_in_rest' => true
+                ]
+            );
+        }
+              
     }
 
     /**

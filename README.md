@@ -11,6 +11,6 @@ This WordPress plugin adds a primary category dropdown to the Gutenberg post edi
 [ ] Selecting additional category should not automatically reset the primary
 [ ] Hook into post autosave/save instead of saving on `onchange` event of select
 [ ] Add template functions & implement hooks for displaying primary category on front-end
-[ ] Add option to implement for taxonomies other than just categories
+[x] Add option to implement for taxonomies other than just categories
 [ ] Fix display issue when toggling between Document and Block tabs
 [ ] Additional testing
