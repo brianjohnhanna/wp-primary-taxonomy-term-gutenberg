@@ -152,7 +152,6 @@ const MIN_TERMS_COUNT_FOR_FILTER = 8;
             
             savePrimaryTerm(termId) {
                 termId = parseInt( termId, 10 );
-
                 const postId = wp.data.select("core/editor").getCurrentPostId();   
                 const { slug } = this.props;
                 apiFetch.use( apiFetch.createNonceMiddleware( window.bjhpc ) );
