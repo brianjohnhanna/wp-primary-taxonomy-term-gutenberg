@@ -7,7 +7,8 @@ import apiFetch from '@wordpress/api-fetch';
 const MIN_TERMS_COUNT_FOR_FILTER = 8;
 
 const FilterTaxonomyTermSelector = ( OriginalComponent ) => {
-
+    
+    // @see https://github.com/WordPress/gutenberg/blob/master/packages/editor/src/components/post-taxonomies/hierarchical-term-selector.js
     class HierarchicalTermSelectorWithPrimaryTerm extends OriginalComponent {
         constructor(props) {
             super(props);
