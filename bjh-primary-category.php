@@ -5,7 +5,7 @@
  * Description: Adds admin UI for selecting a primary taxonomy term
  * Version:     0.1
  * Author:      Brian John Hanna
- * Author URI:  http://brianjohnhanna.com/
+ * Author URI:  https://brianjohnhanna.com
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: bjh-primary-category
@@ -31,15 +31,18 @@ class Primary_Category {
     public function init() {
         add_action(
             'enqueue_block_editor_assets',
-            [ $this, 'enqueue_script' ]
+            [ $this, 'enqueue_assets' ]
         );
 
-        $primary_term_taxonomies = apply_filters('bjh/primary_term_taxonomies', ['category']);
-        
-        // Ensure we have valid taxonomies only
-        $all_taxonomies = get_taxonomies([], 'names');
-        $taxonomies = array_intersect($primary_term_taxonomies, $all_taxonomies);
+        $this->register_meta();           
+    }
 
+    /**
+     * Register meta fields for rest
+     *
+     * @return void
+     */
+    public function register_meta() {
         foreach ( $this->taxonomies as $taxonomy ) {
             register_post_meta( 
                 'post', 
@@ -52,7 +55,6 @@ class Primary_Category {
                 ]
             );
         }
-              
     }
 
     /**
@@ -60,7 +62,7 @@ class Primary_Category {
      *
      * @return void
      */
-    public function enqueue_script() {
+    public function enqueue_assets() {
         wp_register_script(
             'bjh-primary-category-gb', 
             plugins_url( 'dist/main.js', __FILE__ ), 
