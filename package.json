@@ -21,5 +21,10 @@
     "presets": [
       "@wordpress/default"
     ]
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.0",
+    "@wordpress/edit-post": "^3.3.0",
+    "@wordpress/plugins": "^2.2.0"
   }
 }
