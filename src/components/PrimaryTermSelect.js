@@ -1,6 +1,4 @@
 import { SelectControl } from '@wordpress/components';
-import apiFetch from '@wordpress/api-fetch';
-import { addQueryArgs } from '@wordpress/url';
 import { Placeholder, Spinner } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 
