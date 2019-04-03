@@ -71,7 +71,7 @@ class Primary_Category {
      *
      * @return void
      */
-    public function enqueue_assets() 
+    public function register_assets() 
     {
         wp_register_script(
             'bjh-primary-category-gb', 
