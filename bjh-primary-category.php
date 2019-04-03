@@ -74,19 +74,18 @@ class Primary_Category {
     public function register_assets() 
     {
         wp_register_script(
-            'bjh-primary-category-gb', 
+            'bjh-primary-term-selector-gb', 
             plugins_url( 'dist/main.js', __FILE__ ),
             ['wp-plugins', 'wp-edit-post']
         );
-        wp_localize_script('bjh-primary-category-gb', '_bjhpc', [
-            'nonce' => wp_create_nonce('wp_rest'),
+        wp_localize_script('bjh-primary-term-selector-gb', '_bjhpts', [
             'taxonomies' => $this->taxonomies
         ]);
     }
 
     public function enqueue_assets()
     {
-        wp_enqueue_script('bjh-primary-category-gb');
+        wp_enqueue_script('bjh-primary-term-selector-gb');
     }
 }
 

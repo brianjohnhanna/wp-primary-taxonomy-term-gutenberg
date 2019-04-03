@@ -15,4 +15,4 @@ import addPrimaryTermSelect from './components/PrimaryTermSelect';
         }
     );
 
-} )( window.wp.hooks, window._bjhpc )
+} )( window.wp.hooks, window._bjhpts )

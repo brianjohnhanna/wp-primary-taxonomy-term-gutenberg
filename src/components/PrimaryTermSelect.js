@@ -2,6 +2,7 @@ import { Fragment, Component } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { SelectControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const { withSelect, withDispatch } = wp.data;
 
@@ -11,24 +12,6 @@ const DEFAULT_QUERY = {
 	order: 'asc',
 	_fields: 'id,name,parent',
 };
-
-var mapSelectToProps = function( select ) {
-    return {
-        metaFieldValue: select('core/editor')
-            .getEditedPostAttribute('meta')
-            ['_bjh_primary_category'],
-    }
-};
-
-var mapDispatchToProps = function( dispatch ) {
-    return {
-        setMetaFieldValue: function( value ) {
-            dispatch( 'core/editor' ).editPost(
-                { meta: { _bjh_primary_category: value } }
-            );
-        }
-    }
-}
 
 const withPrimaryTermSelect = (WrappedComponent, taxonomy) => {
     return class HierarchicalTermSelectorWithPrimary extends Component {
@@ -88,8 +71,8 @@ const withPrimaryTermSelect = (WrappedComponent, taxonomy) => {
                 <Fragment>
                     <WrappedComponent {...this.props} onUpdateTerms={this.onUpdateTerms} />
                     <SelectControl
-                        label={ `Primary ${taxonomy.labels.singular_name}` }
-                        noOptionLabel="Select a Term"
+                        label={ __(`Primary ${taxonomy.labels.singular_name}`) }
+                        noOptionLabel={ __(`Select a ${taxonomy.labels.singular_name}`) }
                         onChange={ this.props.setMetaFieldValue }
                         value={ metaFieldValue }
                         options={ options }
@@ -100,10 +83,30 @@ const withPrimaryTermSelect = (WrappedComponent, taxonomy) => {
     }
 }
 
+const mapSelectToProps = ( select, props ) => {
+    const { slug } = props;
+    return {
+        metaFieldValue: select('core/editor')
+            .getEditedPostAttribute('meta')
+            [`_bjh_primary_${slug}`]
+    }
+};
+
+const mapDispatchToProps = ( dispatch, props ) => {
+    const { slug } = props;
+    return {
+        setMetaFieldValue: ( value ) => {
+            dispatch( 'core/editor' ).editPost(
+                { meta: { [`_bjh_primary_${slug}`]: value } }
+            );
+        }
+    }
+}
+
 const addPrimaryTermSelect = (OriginalComponent, props) => {
     const HierarchicalTermSelectorWithPrimary = withPrimaryTermSelect(OriginalComponent);
-    var HierarchicalTermSelectorWithPrimaryAndData = withSelect( mapSelectToProps )( HierarchicalTermSelectorWithPrimary );
-    var HierarchicalTermSelectorWithPrimaryAndDataAndActions = withDispatch( mapDispatchToProps )( HierarchicalTermSelectorWithPrimaryAndData );
+    const HierarchicalTermSelectorWithPrimaryAndData = withSelect( mapSelectToProps )( HierarchicalTermSelectorWithPrimary );
+    const HierarchicalTermSelectorWithPrimaryAndDataAndActions = withDispatch( mapDispatchToProps )( HierarchicalTermSelectorWithPrimaryAndData );
     return <HierarchicalTermSelectorWithPrimaryAndDataAndActions {...props} />;
 }
 
